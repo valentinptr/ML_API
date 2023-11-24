@@ -1,7 +1,6 @@
 from enum import Enum
 
 import numpy as np
-import pandas as pd
 from fastapi import FastAPI
 from tensorflow import keras
 
@@ -54,10 +53,9 @@ app = FastAPI()
 async def predict_game(decision: Decision):
     player_choice = str_to_int(decision)
     saved_model = keras.models.load_model('model/model2.h5')
-    df_save = pd.read_csv('model/df_save.csv')
 
-    mean_x = np.array([df_save['mean_x0'][0], df_save['mean_x1'][0]])
-    std_x = np.array([df_save['std_x0'][0], df_save['std_x1'][0]])
+    mean_x = np.array([0.95, 0.32])
+    std_x = np.array([0.83, 0.47])
 
     my_data = ([player_choice, 1] - mean_x) / std_x
 
