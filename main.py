@@ -4,6 +4,9 @@ import numpy as np
 from fastapi import FastAPI
 from tensorflow import keras
 
+app = FastAPI()
+saved_model = keras.models.load_model('model/model2.h5')
+
 
 def rule(player, ia):
     if player == ia:  # 'Tie'
@@ -46,13 +49,9 @@ class Decision(str, Enum):
     scissor = "Scissor"
 
 
-app = FastAPI()
-
-
 @app.post("/predict")
 async def predict_game(decision: Decision):
     player_choice = str_to_int(decision)
-    saved_model = keras.models.load_model('model/model2.h5')
 
     mean_x = np.array([0.95, 0.32])
     std_x = np.array([0.83, 0.47])
