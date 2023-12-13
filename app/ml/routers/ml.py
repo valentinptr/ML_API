@@ -1,12 +1,18 @@
-from enum import Enum
-
-import numpy as np
-from fastapi import FastAPI
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 from tensorflow import keras
+from enum import Enum
+import numpy as np
+from app.ml import database, schemas
+from app.ml.repository import user
 
-app = FastAPI()
-saved_model = keras.models.load_model('model/model2.h5')
+router = APIRouter(
+    prefix="/user",
+    tags=['Users']
+)
 
+get_db = database.get_db
+saved_model = keras.models.load_model('app/ml/model/model2.h5')
 
 def rule(player, ia):
     if player == ia:  # 'Tie'
@@ -48,8 +54,16 @@ class Decision(str, Enum):
     paper = "Paper"
     scissor = "Scissor"
 
+@router.post('/', response_model=schemas.ShowUser)
+def create_user(request: schemas.User, db: Session = Depends(get_db)):
+    return user.create(request, db)
 
-@app.post("/predict")
+
+@router.get('/{id}', response_model=schemas.ShowUser)
+def get_user(id: int, db: Session = Depends(get_db)):
+    return user.show(id, db)
+
+@router.post("/predict")
 async def predict_game(decision: Decision):
     player_choice = str_to_int(decision)
 
