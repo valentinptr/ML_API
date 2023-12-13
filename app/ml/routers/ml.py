@@ -1,18 +1,19 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from tensorflow import keras
 from enum import Enum
+
 import numpy as np
-from app.ml import database, schemas
-from app.ml.repository import user
+from fastapi import APIRouter, Depends
+from tensorflow import keras
+
+from app.ml import database, schemas, oauth2
 
 router = APIRouter(
-    prefix="/user",
-    tags=['Users']
+    prefix="/ml",
+    tags=['Access to model']
 )
 
 get_db = database.get_db
 saved_model = keras.models.load_model('app/ml/model/model2.h5')
+
 
 def rule(player, ia):
     if player == ia:  # 'Tie'
@@ -54,17 +55,9 @@ class Decision(str, Enum):
     paper = "Paper"
     scissor = "Scissor"
 
-@router.post('/', response_model=schemas.ShowUser)
-def create_user(request: schemas.User, db: Session = Depends(get_db)):
-    return user.create(request, db)
-
-
-@router.get('/{id}', response_model=schemas.ShowUser)
-def get_user(id: int, db: Session = Depends(get_db)):
-    return user.show(id, db)
 
 @router.post("/predict")
-async def predict_game(decision: Decision):
+async def predict_game(decision: Decision, current_user: schemas.User = Depends(oauth2.get_current_user)):
     player_choice = str_to_int(decision)
 
     mean_x = np.array([0.95, 0.32])
