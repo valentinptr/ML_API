@@ -5,7 +5,18 @@ from app.ml.database import engine
 from app.ml.routers import ml, authentication, users
 
 
-app = FastAPI()
+app = FastAPI(
+    title="ML Fast API",
+    description="API for interact with Rock, Paper, Scissors AI model.",
+    version="0.0.1",
+    contact={
+        "name": "Valentin",
+        "email": "valentin@example.com",
+    },
+    license_info={
+        "name": "licence",
+    },
+)
 
 models.Base.metadata.create_all(engine)
 
