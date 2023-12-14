@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app.ml import models, schemas
 from app.ml.hashing import Hash
+from sqlalchemy import update
 
 
 def get_all_users(db: Session):
@@ -30,16 +31,16 @@ def delete(id: int, db: Session):
     return "User deleted"
 
 
-def update(id: int, request: schemas.User, db: Session):
-    blog = db.query(models.User).filter(models.User.id == id)
+def update_user(id: int, request: schemas.User, db: Session):
+    user = db.query(models.User).filter(models.User.id == id)
 
-    if not blog.first():
+    if not user.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Blog with id {id} not found")
-
-    blog.update(request.name)
+    user.update(
+        {'name': request.name, 'email': request.email, 'password': Hash.bcrypt(request.password)})
     db.commit()
-    return 'updated'
+    return "User updated"
 
 
 def show(id: int, db: Session):
