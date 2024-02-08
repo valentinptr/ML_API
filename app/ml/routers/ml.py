@@ -4,7 +4,7 @@ import numpy as np
 from fastapi import APIRouter, Depends
 from tensorflow import keras
 
-from app.ml import database, schemas, oauth2
+from .. import database, schemas, oauth2
 
 router = APIRouter(
     prefix="/ml",
@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 get_db = database.get_db
-saved_model = keras.models.load_model('app/ml/model/model2.h5')
+saved_model = keras.models.load_model('ml/model/model2.h5')
 
 
 def rule(player, ia):

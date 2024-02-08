@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from app.ml import models, schemas
-from app.ml.hashing import Hash
+from .. import models, schemas
+from ..hashing import Hash
 from sqlalchemy import update
 
 

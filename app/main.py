@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from app.ml import models
-from app.ml.database import engine
-from app.ml.routers import ml, authentication, users
+from ml import models
+from ml.database import engine
+from ml.routers import ml, authentication, users
 
 
 app = FastAPI(
@@ -10,7 +10,7 @@ app = FastAPI(
     description="API for interact with Rock, Paper, Scissors AI model.",
     version="0.0.1",
     contact={
-        "name": "Valentin",
+        "name": "Valentin ",
         "email": "valentin@example.com",
     },
     license_info={
