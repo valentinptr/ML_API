@@ -1,8 +1,9 @@
 from enum import Enum
 
 import numpy as np
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from tensorflow import keras
+from pydantic import BaseModel
 
 from .. import database, schemas, oauth2
 
@@ -42,23 +43,21 @@ def int_to_str(choice):
 
 
 def str_to_int(choice):
-    if choice is Decision.rock:
+    if choice == "Rock":
         return 0
-    elif choice is Decision.paper:
+    elif choice == "Paper":
         return 1
     else:
         return 2
 
 
-class Decision(str, Enum):
-    rock = "Rock"
-    paper = "Paper"
-    scissor = "Scissor"
+class Decision(BaseModel):
+    choice: str
 
 
 @router.post("/predict")
-async def predict_game(decision: Decision, current_user: schemas.User = Depends(oauth2.get_current_user)):
-    player_choice = str_to_int(decision)
+async def predict_game(decision: Decision):
+    player_choice = str_to_int(decision.choice)
 
     mean_x = np.array([0.95, 0.32])
     std_x = np.array([0.83, 0.47])
@@ -78,4 +77,4 @@ async def predict_game(decision: Decision, current_user: schemas.User = Depends(
 
     output = rule(player_choice, choixIA)
 
-    return {"Prediction : ", int_to_str(choixIA), "Result : ", output}
+    return {"Prediction": int_to_str(choixIA), "Result": output}
