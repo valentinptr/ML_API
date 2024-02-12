@@ -19,6 +19,9 @@ if st.button('GO'):
     res = requests.post(url="http://127.0.0.1:8000/user/", data=json.dumps(inputs))
     st.subheader(f"Response from API: {res.text}")
 
-if st.button('Show all'):
-    res2 = requests.get(url="http://127.0.0.1:8000/user/")
-    st.subheader(f"Response from API: {res2.text}")
+if st.session_state["authentication_status"] is None:
+    st.subheader('Please log in')
+elif st.session_state["authentication_status"]:
+    if st.button('Show all'):
+        res2 = requests.get(url="http://127.0.0.1:8000/user/")
+        st.subheader(f"Response from API: {res2.text}")

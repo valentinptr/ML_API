@@ -1,0 +1,24 @@
+cookie:
+  expiry_days: 30
+  key: some_signature_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    admin:
+      email: admin@gmail.com
+      logged_in: false
+      name: Tom Dupont
+      password: $2b$12$NLZQNJSszBswa5ph3HUzrOl68f6Y9KtqRDUsqEct5B/o/t2Isr96y
+    jsmith:
+      email: jsmith@gmail.com
+      logged_in: false
+      name: John Smith
+      password: $2b$12$vsiUFlPvO6DtTz9OzTxnou5l4y9abgmpWl0d.y2bNk6FUBvg05ZMG
+    rbriggs:
+      email: rbriggs@gmail.com
+      logged_in: false
+      name: Rebecca Briggs
+      password: $2b$12$3wSTHE/lrfJYEIzL.2cU5uT11SByjFh9WLi5nKjLr1c4EDME0vovS
+preauthorized:
+  emails:
+  - melsby@gmail.com
